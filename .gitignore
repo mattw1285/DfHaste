@@ -1,5 +1,7 @@
 # project specific 
-#**/environment.toml
+**/environment.toml
+**/cached_data/
+**/sql_library/
 
 # python
 __pycache__/
