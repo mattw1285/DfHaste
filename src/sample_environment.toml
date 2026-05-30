@@ -5,8 +5,7 @@
 [[database]]
 name="db_1_dev"
 driver="cx_oracle"
-[database.location]
-hostname=""
+hostname="server1"
 port=1521
 [database.auth]
 type="basic"
@@ -16,8 +15,7 @@ password="***"
 [[database]]
 name="db_1_prod"
 driver="pyodbc"
-[database.location]
-hostname=""
+hostname="server2"
 port=1521
 [database.auth]
 type="trusted_connection"
@@ -25,5 +23,4 @@ type="trusted_connection"
 [[database]]
 name="db_2_prod"
 driver="sqlite3"
-[database.location]
 path="C:/my_sqlite.db"
