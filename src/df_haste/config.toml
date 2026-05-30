@@ -1,0 +1,30 @@
+# Welcome to the world of cofiguration.
+# Configure db connections to begin the haste!
+
+[database]
+name="db_1_dev"
+hostname=""
+port=1521
+driver="cx_oracle"
+username="me"
+password="***"
+
+[database]
+name="db_1_prod"
+hostname=""
+port=1521
+driver="cx_oracle"
+username="me"
+password="***"
+
+[database]
+name="db_1_prod"
+hostname=""
+port=1521
+driver="pyodbc"
+auth="trusted_auth"
+
+[database]
+name="db_2_prod"
+driver="sqlite3"
+path="C:\my_sqlite.db"
