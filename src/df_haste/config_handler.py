@@ -53,8 +53,14 @@ class ConfigHandler():
 
     ## Write Me! ##
     """
+    _default_path = Path(__file__).parent / 'config.toml'
+
     @classmethod
-    def _read_config(cls) -> dict:
+    def _read_config(
+            cls, 
+            config_path:Path = _default_path
+        ) -> dict:
+        """ ## Write Me! ## """
         config_path = Path(__file__).parent / 'config.toml'
         with open(config_path, "rb") as f:
             data = tomllib.load(f)
