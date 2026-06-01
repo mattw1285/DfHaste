@@ -1,13 +1,26 @@
 ## Standard Library Imports ##
 import tomllib
 from pathlib import Path
-from typing import Self
+from typing import Self, Literal
 
 ## Third Party Imports ##
 from pydantic import (
     BaseModel,
     model_validator
 )
+
+class SQLiteConfig(BaseModel):
+    """ ## Write Me! ## """
+    name: str
+    driver: Literal['sqlite3']
+    path: Path
+
+    @model_validator(mode='after')
+    def validate_path(self) -> Self:
+        if not self.path.exists ():
+            raise ValueError(f"Invalid 'path' to {self.name} (sqlite3)")
+        return self
+
 
 class DatabaseConfig(BaseModel):
     """ Pydantic BaseModel to encapsulate connection details 
@@ -59,7 +72,7 @@ class ConfigHandler():
     def _read_config(
             cls, 
             config_path:Path = _default_path
-        ) -> dict:
+    ) -> dict:
         """ ## Write Me! ## """
         config_path = Path(__file__).parent / 'config.toml'
         with open(config_path, "rb") as f:
