@@ -9,6 +9,16 @@ from pydantic import (
     model_validator
 )
 
+
+class BaseDbConfig(BaseModel):
+    name: str
+    driver: str
+
+
+class OracleDbConfig(BaseDbConfig):
+    driver: Literal['cx_oracle', 'oracledb']
+
+
 class SQLiteConfig(BaseModel):
     """ ## Write Me! ## """
     name: str
@@ -22,35 +32,50 @@ class SQLiteConfig(BaseModel):
         return self
 
 
-class DatabaseConfig(BaseModel):
-    """ Pydantic BaseModel to encapsulate connection details 
+class UnkownDbConfig(BaseDbConfig):
+    hostname: str
+    port: int
+    service_name: str|None
+    sid: str|None
+    username: str
+    password: str
 
-    ## Write Me! ##
-    """
-    name: str
-    driver: str
-    hostname: str|None = None
-    sid: str|None = None
-    service_name: str|None = None
-    path: Path|None = None
-    username: str|None = None
-    password: str|None = None
 
-    @model_validator(mode='after')
-    def validate_path(self) -> Self:
-        if self.driver == 'sqlite3' and self.path is None:
-            raise ValueError(f"{self.name} (sqlite3) needs a 'path'")
-        elif self.driver != 'sqlite3' and self.path is not None:
-            raise ValueError(f"only (sqlite3) needs a 'path' not {self.name}")
-        return self
+DatabaseConfig = (
+    SQLiteConfig
+    | OracleDbConfig
+    | UnkownDbConfig
+)
 
-    @model_validator(mode='after')
-    def validate_host(self) -> Self:
-        pass
+# class DatabaseConfig(BaseModel):
+#     """ Pydantic BaseModel to encapsulate connection details 
 
-    @model_validator(mode='after')
-    def validate_auth(self) -> Self:
-        pass
+#     ## Write Me! ##
+#     """
+#     name: str
+#     driver: str
+#     hostname: str|None = None
+#     sid: str|None = None
+#     service_name: str|None = None
+#     path: Path|None = None
+#     username: str|None = None
+#     password: str|None = None
+
+#     @model_validator(mode='after')
+#     def validate_path(self) -> Self:
+#         if self.driver == 'sqlite3' and self.path is None:
+#             raise ValueError(f"{self.name} (sqlite3) needs a 'path'")
+#         elif self.driver != 'sqlite3' and self.path is not None:
+#             raise ValueError(f"only (sqlite3) needs a 'path' not {self.name}")
+#         return self
+
+#     @model_validator(mode='after')
+#     def validate_host(self) -> Self:
+#         pass
+
+#     @model_validator(mode='after')
+#     def validate_auth(self) -> Self:
+#         pass
 
        
 class SqlQuery(BaseModel):
