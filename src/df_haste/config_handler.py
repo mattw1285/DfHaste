@@ -15,12 +15,16 @@ class BaseDbConfig(BaseModel):
     driver: str
 
 
-class OracleDbConfig(BaseDbConfig):
+class BasicAuthConfig(BaseDbConfig):
     driver: Literal['cx_oracle', 'oracledb']
+    port: int
+    service_name: str|None
+    sid: str|None
+    username: str
+    password: str
 
 
 class SQLiteConfig(BaseModel):
-    """ ## Write Me! ## """
     name: str
     driver: Literal['sqlite3']
     path: Path
@@ -46,38 +50,9 @@ DatabaseConfig = (
     | OracleDbConfig
     | UnkownDbConfig
 )
-
-# class DatabaseConfig(BaseModel):
-#     """ Pydantic BaseModel to encapsulate connection details 
-
-#     ## Write Me! ##
-#     """
-#     name: str
-#     driver: str
-#     hostname: str|None = None
-#     sid: str|None = None
-#     service_name: str|None = None
-#     path: Path|None = None
-#     username: str|None = None
-#     password: str|None = None
-
-#     @model_validator(mode='after')
-#     def validate_path(self) -> Self:
-#         if self.driver == 'sqlite3' and self.path is None:
-#             raise ValueError(f"{self.name} (sqlite3) needs a 'path'")
-#         elif self.driver != 'sqlite3' and self.path is not None:
-#             raise ValueError(f"only (sqlite3) needs a 'path' not {self.name}")
-#         return self
-
-#     @model_validator(mode='after')
-#     def validate_host(self) -> Self:
-#         pass
-
-#     @model_validator(mode='after')
-#     def validate_auth(self) -> Self:
-#         pass
-
+_adapter = TypeAdapter(DatabaseConfig)
        
+
 class SqlQuery(BaseModel):
     """ Pydantic BaseModel to cover saved queries metadata
 
