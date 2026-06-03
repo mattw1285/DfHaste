@@ -2,6 +2,6 @@
 # I have a outsourced .env secrets to a second file for better secret 
 # management
 
-ENVRIONMENT_CONFIG="../environment.toml"
+ENVRIONMENT_CONFIG="/home/DfHaste/src/environment.toml"
 FILE_CACHE="../cached_data/"
 SQL_LIBRARY="../sql_library/"

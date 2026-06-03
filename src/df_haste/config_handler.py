@@ -1,21 +1,25 @@
 ## Standard Library Imports ##
-import tomllib
 from pathlib import Path
+import tomllib
 from typing import Self, Literal
+from abc import ABC, abstractmethod
 
 ## Third Party Imports ##
-from pydantic import (
-    BaseModel,
-    model_validator
-)
+from pydantic import BaseModel, model_validator
 
 
-class BaseDbConfig(BaseModel):
+class BaseDbConfig(ABC, BaseModel):
+    """ """
     name: str
     driver: str
 
+    @property
+    @abstractmethod
+    def url(self) -> str:
+        pass
 
-class BasicAuthConfig(BaseDbConfig):
+
+class OracleDbConfig(BaseDbConfig):
     driver: Literal['cx_oracle', 'oracledb']
     port: int
     service_name: str|None
@@ -23,9 +27,11 @@ class BasicAuthConfig(BaseDbConfig):
     username: str
     password: str
 
+    def url(self) -> str: 
+        return f'{driver}://'
 
-class SQLiteConfig(BaseModel):
-    name: str
+
+class SQLiteConfig(BaseDbConfig):
     driver: Literal['sqlite3']
     path: Path
 
@@ -35,22 +41,11 @@ class SQLiteConfig(BaseModel):
             raise ValueError(f"Invalid 'path' to {self.name} (sqlite3)")
         return self
 
-
-class UnkownDbConfig(BaseDbConfig):
-    hostname: str
-    port: int
-    service_name: str|None
-    sid: str|None
-    username: str
-    password: str
+    def url(self) -> str: 
+        return f'oracle+{driver}://'
 
 
-DatabaseConfig = (
-    SQLiteConfig
-    | OracleDbConfig
-    | UnkownDbConfig
-)
-_adapter = TypeAdapter(DatabaseConfig)
+DbConfig = SQLiteConfig | OracleDbConfig 
        
 
 class SqlQuery(BaseModel):
@@ -80,7 +75,7 @@ class ConfigHandler():
         return data
  
     @classmethod
-    def databases(cls) -> list[DatabaseConfig]:
+    def databases(cls) -> list[str]:
         """ Responsible for serving database config objects. """
         pass
     
@@ -89,7 +84,8 @@ class ConfigHandler():
         pass
 
     @classmethod
-    def get_database(self, name:str) -> DatabaseConfig:
-        pass
+    def get_db(cls, name:str) -> DbConfig:
+        attrb = cls._read_config()
+        return attrb
 
-print(ConfigHandler._read_config())
+print(ConfigHandler.get_db('test'))
