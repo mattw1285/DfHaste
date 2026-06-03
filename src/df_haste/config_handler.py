@@ -9,14 +9,29 @@ from pydantic import BaseModel, model_validator
 
 
 class BaseDbConfig(ABC, BaseModel):
-    """ """
+    """ Pydantic and ABC validation on db connection config. 
+
+    This is a base template to inherit from and should not be instantiated! The
+    url method is defined as the clean ineterface to be called. Responsibilty 
+    is given only to handle config read, all other 
+
+    Attributes:
+        name: unique string to identify an object
+        driver: the name of the python driver
+    """
     name: str
     driver: str
 
     @property
     @abstractmethod
     def url(self) -> str:
-        pass
+        """ Returns SqlAlchemy connection url.
+
+        Universal interface to allow for creating connections, SQLAlchemy 
+        is the driver for this. Children must implement to maintain the engine 
+        creation interface.
+        """
+        pass 
 
 
 class OracleDbConfig(BaseDbConfig):
@@ -85,7 +100,13 @@ class ConfigHandler():
 
     @classmethod
     def get_db(cls, name:str) -> DbConfig:
-        attrb = cls._read_config()
-        return attrb
+        env = cls._read_config()
+        env = env.get('ENVIRONMENT_CONFIG')
+        if env is None:
+            raise KeyError('ENVIRONMENT_CONFIG not defined!')
+        with open(Path(env),'rb') as f:
+            env = tomllib.load(f)
+        return env
+
 
 print(ConfigHandler.get_db('test'))
