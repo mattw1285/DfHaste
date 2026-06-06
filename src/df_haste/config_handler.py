@@ -34,18 +34,6 @@ class BaseDbConfig(ABC, BaseModel):
         pass 
 
 
-class OracleDbConfig(BaseDbConfig):
-    driver: Literal['cx_oracle', 'oracledb']
-    port: int
-    service_name: str|None
-    sid: str|None
-    username: str
-    password: str
-
-    def url(self) -> str: 
-        return f'{driver}://'
-
-
 class SQLiteConfig(BaseDbConfig):
     driver: Literal['sqlite3']
     path: Path
@@ -60,7 +48,26 @@ class SQLiteConfig(BaseDbConfig):
         return f'oracle+{driver}://'
 
 
-DbConfig = SQLiteConfig | OracleDbConfig 
+class SQLServerConfig(BaseDbConfig):
+    driver: Literal['pyodbc']
+    
+    def url(self) -> str: 
+        return f'{driver}://'
+
+
+class OracleDbConfig(BaseDbConfig):
+    driver: Literal['cx_oracle', 'oracledb']
+    port: int
+    service_name: str|None
+    sid: str|None
+    username: str
+    password: str
+
+    def url(self) -> str: 
+        return f'{driver}://'
+
+
+DbConfig = (SQLiteConfig | OracleDbConfig | SQLServerConfig)
        
 
 class SqlQuery(BaseModel):
@@ -71,9 +78,10 @@ class SqlQuery(BaseModel):
     pass
 
 
-class ConfigHandler():
-    """ Parent class to handle pydantic components.
+class ConfigHandler:
+    """ A class to abstract config file reads!
 
+    Parent class to handle pydantic components.
     ## Write Me! ##
     """
     _default_path = Path(__file__).parent / 'config.toml'
