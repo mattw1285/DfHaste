@@ -115,7 +115,3 @@ class ConfigHandler:
         with open(Path(env),'rb') as f:
             env = tomllib.load(f)
         return env
-
-
-print(ConfigHandler.get_db('test'))
-print(__file__)
