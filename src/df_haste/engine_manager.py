@@ -40,17 +40,4 @@ class engine_manager:
             conn_string = self._db_config[db_name]['conn_string']
             db_engine = create_engine(conn_string)
             self._engines[db_name] = db_engine
- 
-class OracleDbConfig(BaseDbConfig):
-    driver: Literal['cx_oracle', 'oracledb']
-    port: int
-    service_name: str|None
-    sid: str|None
-    username: str
-    password: str
-
-    def url(self) -> str: 
-        return f'{driver}://'
-
-
-       return db_engine
+      return db_engine

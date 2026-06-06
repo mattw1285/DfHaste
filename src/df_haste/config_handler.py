@@ -118,3 +118,4 @@ class ConfigHandler:
 
 
 print(ConfigHandler.get_db('test'))
+print(__file__)
