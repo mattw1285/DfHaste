@@ -1,5 +1,6 @@
 # project specific 
 **/environment.toml
+**/config.toml
 **/cached_data/
 **/sql_library/
 

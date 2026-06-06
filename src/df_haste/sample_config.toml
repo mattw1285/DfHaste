@@ -1,0 +1,16 @@
+#------------------------------------------------------------------------------
+# 
+#   config.toml
+# 
+#------------------------------------------------------------------------------
+# By default, this library looks for a 'config.toml' within the library.
+#
+# All paths need to be valid complete paths, realtive paths are shown for 
+# simplicity of demonstration.
+# 
+# Env secrets are outsorced to a second config to better support shared 
+# directory collaboration.
+#------------------------------------------------------------------------------
+ENVIRONMENT_CONFIG="../environment.toml"
+FILE_CACHE="../cached_data/"
+SQL_LIBRARY="../sql_library/"
