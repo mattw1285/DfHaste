@@ -8,6 +8,10 @@ from sqlalchemy import (
     Engine
 )
 
+## Local Library Imports ##
+from .config_handler import ConfigHandler
+
+
 class engine_manager:
     """ Central factory and register for SQLAlchemy Engine instances.
     
@@ -15,11 +19,11 @@ class engine_manager:
     initialized once per db and simplify initialisation.
     """
     def __init__(
-            self, 
-            config_path: str = os.path.join(
-                os.path.dirname(__file__),
-                'config.json'
-            )
+        self, 
+        config_path: str = os.path.join(
+            os.path.dirname(__file__),
+            'config.json'
+        )
     ):
         self._engines = {}
         with open(config_path, 'r') as config_file:
@@ -36,4 +40,17 @@ class engine_manager:
             conn_string = self._db_config[db_name]['conn_string']
             db_engine = create_engine(conn_string)
             self._engines[db_name] = db_engine
-        return db_engine
+ 
+class OracleDbConfig(BaseDbConfig):
+    driver: Literal['cx_oracle', 'oracledb']
+    port: int
+    service_name: str|None
+    sid: str|None
+    username: str
+    password: str
+
+    def url(self) -> str: 
+        return f'{driver}://'
+
+
+       return db_engine

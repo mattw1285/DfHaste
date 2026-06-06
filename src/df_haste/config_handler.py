@@ -88,8 +88,8 @@ class ConfigHandler:
 
     @classmethod
     def _read_config(
-            cls, 
-            config_path:Path = _default_path
+        cls, 
+        config_path:Path = _default_path
     ) -> dict:
         """ ## Write Me! ## """
         config_path = Path(__file__).parent / 'config.toml'
