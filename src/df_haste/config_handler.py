@@ -44,6 +44,7 @@ class SQLiteConfig(BaseDbConfig):
             raise ValueError(f"Invalid 'path' to {self.name} (sqlite3)")
         return self
 
+    @property
     def url(self) -> str: 
         return f'oracle+{driver}://'
 
@@ -51,6 +52,7 @@ class SQLiteConfig(BaseDbConfig):
 class SQLServerConfig(BaseDbConfig):
     driver: Literal['pyodbc']
     
+    @property
     def url(self) -> str: 
         return f'{driver}://'
 
@@ -99,15 +101,12 @@ class ConfigHandler:
  
     @classmethod
     def databases(cls) -> list[str]:
-        """ Responsible for serving database config objects. """
+        """ Returns a list of availabe db connections. """
         pass
-    
-    @classmethod
-    def sql_queries(cls) -> list[SqlQuery]:
-        pass
-
+   
     @classmethod
     def get_db(cls, name:str) -> DbConfig:
+        """ Getter method for DbConfig objects. """
         env = cls._read_config()
         env = env.get('ENVIRONMENT_CONFIG')
         if env is None:
@@ -115,3 +114,11 @@ class ConfigHandler:
         with open(Path(env),'rb') as f:
             env = tomllib.load(f)
         return env
+
+    @classmethod
+    def sql_queries(cls) -> list[str]:
+        pass
+
+    @classmethod
+    def sql_query(cls) -> SqlQuery:
+        pass
