@@ -11,15 +11,15 @@ __pycache__/
 .venv
 venv/
 venv
-
-# pytest
 .pytest_cache/
 
 # Spyder
 .spyderproject
 .spyproject
+
 # Jupyter Notebook
 .ipynb_checkpoints
+
 # Vim
 *.swp
 *.swo
