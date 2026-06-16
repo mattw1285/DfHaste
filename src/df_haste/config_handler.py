@@ -99,7 +99,6 @@ class ConfigHandler:
         config_path:Path = _default_path
     ) -> dict:
         """ Returns a dict of """
-        config_path = Path(__file__).parent / 'config.toml'
         with open(config_path, "rb") as f:
             data = tomllib.load(f)
         return data
@@ -127,3 +126,6 @@ class ConfigHandler:
     @classmethod
     def sql_query(cls) -> SqlQuery:
         pass
+
+if __name__ == '__main__':
+    print(ConfigHandler.get_db(':memory:'))
