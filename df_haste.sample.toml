@@ -11,6 +11,6 @@
 # Env secrets are outsorced to a second config to better support shared 
 # directory collaboration.
 #------------------------------------------------------------------------------
-ENVIRONMENT_CONFIG="../environment.toml"
-FILE_CACHE="../cached_data/"
-SQL_LIBRARY="../sql_library/"
+ENVIRONMENT_CONFIG="./environment.toml"
+FILE_CACHE="./cached_data/"
+SQL_LIBRARY="./sql_library/"
