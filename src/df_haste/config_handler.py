@@ -9,15 +9,12 @@ from pydantic import BaseModel, model_validator
 
 
 class BaseDbConfig(ABC, BaseModel):
-    """ Pydantic and ABC validation on db connection config. 
-
-    This is a base template to inherit from and should not be instantiated! The
-    url method is defined as the clean ineterface to be called. Responsibilty 
-    is given only to handle config read, all other 
+    """ Pydantic and ABC base template for db connection configs. 
 
     Attributes:
         name: unique string to identify an object
         driver: the name of the python driver
+        url(property): sqlalchemy connection url
     """
     name: str
     driver: str
@@ -25,39 +22,46 @@ class BaseDbConfig(ABC, BaseModel):
     @property
     @abstractmethod
     def url(self) -> str:
-        """ Returns SqlAlchemy connection url.
-
-        Universal interface to allow for creating connections, SQLAlchemy 
-        is the driver for this. Children must implement to maintain the engine 
-        creation interface.
-        """
+        """ Returns SqlAlchemy connection url. """
         pass 
 
 
 class SQLiteConfig(BaseDbConfig):
+    """ A SQLite sepcific DbConfig implementation of BaseDbConfig.
+
+    Attributes:
+        path: file location or the ':memory:' edge case
+    """
     driver: Literal['sqlite3']
-    path: Path
+    path: Path | Literal[':memory:']
 
     @model_validator(mode='after')
     def validate_path(self) -> Self:
+        """ Validates the db path. """
+        if self.path == ':memory:':
+            return self
         if not self.path.exists ():
             raise ValueError(f"Invalid 'path' to {self.name} (sqlite3)")
         return self
 
     @property
-    def url(self) -> str: 
-        return f'oracle+{driver}://'
+    def url(self) -> str:
+        """ Returns sqlalchemy sqlite engine connection url. """
+        return f'sqlite:///{self.path}'
 
 
 class SQLServerConfig(BaseDbConfig):
+    """ ## Write Me! ## """
     driver: Literal['pyodbc']
     
     @property
     def url(self) -> str: 
-        return f'{driver}://'
+        """ ## Write Me! ## """
+        return f'mssql+{self.driver}://'
 
 
 class OracleDbConfig(BaseDbConfig):
+    """ ## Write Me! ## """
     driver: Literal['cx_oracle', 'oracledb']
     port: int
     service_name: str|None
@@ -66,6 +70,7 @@ class OracleDbConfig(BaseDbConfig):
     password: str
 
     def url(self) -> str: 
+        """ ## Write Me! ## """
         return f'{driver}://'
 
 
@@ -86,14 +91,14 @@ class ConfigHandler:
     Parent class to handle pydantic components.
     ## Write Me! ##
     """
-    _default_path = Path(__file__).parent / 'config.toml'
+    _default_path = Path('./df_haste.toml')
 
     @classmethod
     def _read_config(
         cls, 
         config_path:Path = _default_path
     ) -> dict:
-        """ ## Write Me! ## """
+        """ Returns a dict of """
         config_path = Path(__file__).parent / 'config.toml'
         with open(config_path, "rb") as f:
             data = tomllib.load(f)
