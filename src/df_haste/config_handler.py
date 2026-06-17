@@ -73,7 +73,7 @@ class SqlQuery(BaseModel):
 
     ## Write Me! ##
     """
-    pss
+    pass
 
 
 class ConfigHandler:
@@ -82,41 +82,41 @@ class ConfigHandler:
     Parent class to handle pydantic components.
     ## Write Me! ##
     """
-    _default_path = Path('./df_haste.toml')
+    def __init__(self, config_path: Path):
+        if not config_path.exists():
+            raise ValueError('Config file cannot be found!')
+        self.config_path = config_path
 
-    @classmethod
-    def _read_config(
-        cls, 
-        config_path:Path = _default_path
-    ) -> dict:
-        """ Returns a dict of """
+    @property
+    def _config(self) -> dict:
+        """ Returns a dict of config. """
         with open(config_path, "rb") as f:
             data = tomllib.load(f)
         return data
- 
-    @classmethod
-    def databases(cls) -> list[str]:
+
+    @property
+    def _env(self) -> dict:
+        """ Returns a dict of env variables. """
+        pass
+
+    def databases(self) -> list[str]:
         """ Returns a list of availabe db connections. """
         pass
    
-    @classmethod
-    def get_db(cls, name:str) -> DbConfig:
+    def get_db(self, name:str) -> DbConfig:
         """ Getter method for DbConfig objects. """
-        env = cls._read_config()
+        env = cls._read_config(config_path)
         env = env.get('ENVIRONMENT_CONFIG')
         if env is None:
             raise KeyError('ENVIRONMENT_CONFIG not defined!')
-        with open(Path(env),'rb') as f:
-            env = tomllib.load(f)
         return env
 
-    @classmethod
-    def sql_queries(cls) -> list[str]:
+    def sql_queries(self) -> list[str]:
         pass
 
-    @classmethod
-    def sql_query(cls) -> SqlQuery:
+    def sql_query(self) -> SqlQuery:
         pass
+
 
 if __name__ == '__main__':
     print(ConfigHandler.get_db(':memory:'))
