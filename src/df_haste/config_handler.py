@@ -51,30 +51,21 @@ class SQLiteConfig(BaseDbConfig):
 
 
 class SQLServerConfig(BaseDbConfig):
-    """ ## Write Me! ## """
-    driver: Literal['pyodbc']
-    
-    @property
-    def url(self) -> str: 
-        """ ## Write Me! ## """
-        return f'mssql+{self.driver}://'
+    """ An MS SQL Server specific DbConfig implementation of BaseDbConfig. """
+    pass
 
 
 class OracleDbConfig(BaseDbConfig):
-    """ ## Write Me! ## """
-    driver: Literal['cx_oracle', 'oracledb']
-    port: int
-    service_name: str|None
-    sid: str|None
-    username: str
-    password: str
-
-    def url(self) -> str: 
-        """ ## Write Me! ## """
-        return f'{driver}://'
+    """ An Oracle specific DbConfig implementation of BaseDbConfig. """
+    pass
 
 
-DbConfig = (SQLiteConfig | OracleDbConfig | SQLServerConfig)
+class PgConfig(BaseDbConfig):
+    """ A postgres specific DbConfig implementation of BaseDbConfig. """
+    pass
+
+
+DbConfig = (SQLiteConfig | OracleDbConfig | SQLServerConfig | PgConfig)
        
 
 class SqlQuery(BaseModel):
@@ -82,7 +73,7 @@ class SqlQuery(BaseModel):
 
     ## Write Me! ##
     """
-    pass
+    pss
 
 
 class ConfigHandler:
